@@ -1,189 +1,3 @@
-// import React, { useState } from 'react';
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableContainer,
-//   TableHead,
-//   TableRow,
-//   Paper,
-//   IconButton,
-//   Collapse,
-//   Box,
-//   Typography,
-//   Grid,
-// } from '@mui/material';
-// import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-// import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-// import DeleteIcon from '@mui/icons-material/Delete';
-
-// interface Discount {
-//   description: string;
-//   discountPercent: number;
-//   discountRate: number;
-// }
-
-// interface Tax {
-//   description: string;
-//   taxPercent: number;
-//   taxRate: number;
-// }
-
-// interface LineItem {
-//   description: string;
-//   quantity: number;
-//   unit_price: number;
-//   total_price: number;
-//   final_price: number;
-//   discounts: Discount[];
-//   taxes: Tax[];
-// }
-
-// const LineItems: React.FC = () => {
-//   const [lineItems, setLineItems] = useState<LineItem[]>([
-//     {
-//       description: 'Product A',
-//       quantity: 10,
-//       unit_price: 15.0,
-//       total_price: 150.0,
-//       final_price: 130.0,
-//       discounts: [{ description: 'Seasonal Discount', discountPercent: 10, discountRate: 15 }],
-//       taxes: [
-//         { description: 'CGST', taxPercent: 5, taxRate: 7.5 },
-//         { description: 'SGST', taxPercent: 5, taxRate: 7.5 },
-//       ],
-//     },
-//     {
-//       description: 'Product B',
-//       quantity: 5,
-//       unit_price: 20.0,
-//       total_price: 100.0,
-//       final_price: 95.0,
-//       discounts: [{ description: 'Festive Offer', discountPercent: 5, discountRate: 5 }],
-//       taxes: [{ description: 'GST', taxPercent: 12, taxRate: 12 }],
-//     },
-//   ]);
-
-//   const [openRows, setOpenRows] = useState<number[]>([]);
-
-//   const handleRowToggle = (index: number) => {
-//     setOpenRows((prevOpenRows) =>
-//       prevOpenRows.includes(index)
-//         ? prevOpenRows.filter((i) => i !== index)
-//         : [...prevOpenRows, index],
-//     );
-//   };
-
-//   const handleDelete = (index: number) => {
-//     setLineItems((prevLineItems) => prevLineItems.filter((_, i) => i !== index));
-//   };
-
-//   return (
-//     <TableContainer component={Paper}>
-//       <Table aria-label='collapsible table'>
-//         <TableHead>
-//           <TableRow>
-//             <TableCell />
-//             <TableCell>Description</TableCell>
-//             <TableCell>Quantity</TableCell>
-//             <TableCell>Unit Price ($)</TableCell>
-//             <TableCell>Total Price ($)</TableCell>
-//             <TableCell>Final Price ($)</TableCell>
-//             <TableCell>Actions</TableCell>
-//           </TableRow>
-//         </TableHead>
-//         <TableBody>
-//           {lineItems.map((item, index) => (
-//             <React.Fragment key={index}>
-//               <TableRow>
-//                 <TableCell>
-//                   <IconButton
-//                     aria-label='expand row'
-//                     size='small'
-//                     onClick={() => handleRowToggle(index)}
-//                   >
-//                     {openRows.includes(index) ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-//                   </IconButton>
-//                 </TableCell>
-//                 <TableCell>{item.description}</TableCell>
-//                 <TableCell>{item.quantity}</TableCell>
-//                 <TableCell>{item.unit_price.toFixed(2)}</TableCell>
-//                 <TableCell>{item.total_price.toFixed(2)}</TableCell>
-//                 <TableCell>{item.final_price.toFixed(2)}</TableCell>
-//                 <TableCell>
-//                   <IconButton onClick={() => handleDelete(index)} color='error'>
-//                     <DeleteIcon />
-//                   </IconButton>
-//                 </TableCell>
-//               </TableRow>
-//               <TableRow>
-//                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
-//                   <Collapse in={openRows.includes(index)} timeout='auto' unmountOnExit>
-//                     <Box margin={1}>
-//                       <Grid container spacing={2}>
-//                         {/* Discount Table */}
-//                         <Grid item xs={12} md={6}>
-//                           <Typography variant='h6' gutterBottom component='div'>
-//                             Discounts
-//                           </Typography>
-//                           <Table size='small' aria-label='discounts'>
-//                             <TableHead>
-//                               <TableRow>
-//                                 <TableCell>Description</TableCell>
-//                                 <TableCell>Discount %</TableCell>
-//                                 <TableCell>Discount Rate ($)</TableCell>
-//                               </TableRow>
-//                             </TableHead>
-//                             <TableBody>
-//                               {item.discounts.map((discount, discountIndex) => (
-//                                 <TableRow key={discountIndex}>
-//                                   <TableCell>{discount.description}</TableCell>
-//                                   <TableCell>{discount.discountPercent.toFixed(2)}%</TableCell>
-//                                   <TableCell>{discount.discountRate.toFixed(2)}</TableCell>
-//                                 </TableRow>
-//                               ))}
-//                             </TableBody>
-//                           </Table>
-//                         </Grid>
-//                         {/* Tax Table */}
-//                         <Grid item xs={12} md={6}>
-//                           <Typography variant='h6' gutterBottom component='div'>
-//                             Taxes
-//                           </Typography>
-//                           <Table size='small' aria-label='taxes'>
-//                             <TableHead>
-//                               <TableRow>
-//                                 <TableCell>Description</TableCell>
-//                                 <TableCell>Tax %</TableCell>
-//                                 <TableCell>Tax Rate ($)</TableCell>
-//                               </TableRow>
-//                             </TableHead>
-//                             <TableBody>
-//                               {item.taxes.map((tax, taxIndex) => (
-//                                 <TableRow key={taxIndex}>
-//                                   <TableCell>{tax.description}</TableCell>
-//                                   <TableCell>{tax.taxPercent.toFixed(2)}%</TableCell>
-//                                   <TableCell>{tax.taxRate.toFixed(2)}</TableCell>
-//                                 </TableRow>
-//                               ))}
-//                             </TableBody>
-//                           </Table>
-//                         </Grid>
-//                       </Grid>
-//                     </Box>
-//                   </Collapse>
-//                 </TableCell>
-//               </TableRow>
-//             </React.Fragment>
-//           ))}
-//         </TableBody>
-//       </Table>
-//     </TableContainer>
-//   );
-// };
-
-// export default LineItems;
-
 import React, { useState } from 'react';
 import {
   Table,
@@ -209,6 +23,10 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import Footer from '../Footer/Footer';
+import Header from '../Header/Header';
+import { useNavigate } from 'react-router-dom';
+import { Edit } from '@mui/icons-material';
 
 interface Discount {
   description: string;
@@ -257,10 +75,11 @@ const initialLineItems: LineItem[] = [
 ];
 
 const LineItems: React.FC = () => {
+  const navigate = useNavigate();
   const [lineItems, setLineItems] = useState<LineItem[]>(initialLineItems);
   const [openRows, setOpenRows] = useState<number[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [newItem, setNewItem] = useState<Partial<LineItem>>({
+  const [newItem, setNewItem] = useState<LineItem>({
     description: '',
     quantity: 0,
     unit_price: 0,
@@ -269,6 +88,11 @@ const LineItems: React.FC = () => {
     discounts: [],
     taxes: [],
   });
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  const onClickSave = () => {
+    navigate('/preview-save');
+  };
 
   const handleRowToggle = (index: number) => {
     setOpenRows((prevOpenRows) =>
@@ -287,10 +111,20 @@ const LineItems: React.FC = () => {
   };
 
   const handleDialogClose = () => {
+    setEditingIndex(null);
     setDialogOpen(false);
+    setNewItem({
+      description: '',
+      quantity: 0,
+      unit_price: 0,
+      total_price: 0,
+      final_price: 0,
+      discounts: [],
+      taxes: [],
+    });
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNewItem((prevItem) => ({
       ...prevItem,
@@ -300,13 +134,29 @@ const LineItems: React.FC = () => {
 
   const handleSave = () => {
     if (newItem.description) {
-      setLineItems((prevLineItems) => [...prevLineItems, newItem as LineItem]);
+      if (editingIndex !== null) {
+        // Edit existing item
+        setLineItems((prevLineItems) =>
+          prevLineItems.map((item, index) =>
+            index === editingIndex ? (newItem as LineItem) : item,
+          ),
+        );
+      } else {
+        setLineItems((prevLineItems) => [...prevLineItems, newItem as LineItem]);
+      }
       handleDialogClose();
     }
   };
 
+  const handleEdit = (index: number) => {
+    setEditingIndex(index);
+    setNewItem(lineItems[index]); // Populate dialog with existing data
+    handleDialogOpen();
+  };
+
   return (
     <>
+      <Header title='Add or Edit Line Items'></Header>
       <Button
         variant='contained'
         color='primary'
@@ -352,6 +202,9 @@ const LineItems: React.FC = () => {
                   <TableCell>{(+item.total_price)?.toFixed(2)}</TableCell>
                   <TableCell>{(+item.final_price)?.toFixed(2)}</TableCell>
                   <TableCell>
+                    <IconButton onClick={() => handleEdit(index)} color='primary'>
+                      <Edit />
+                    </IconButton>
                     <IconButton onClick={() => handleDelete(index)} color='error'>
                       <DeleteIcon />
                     </IconButton>
@@ -421,7 +274,7 @@ const LineItems: React.FC = () => {
         </Table>
       </TableContainer>
       <Dialog open={dialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>Add New Line Item</DialogTitle>
+        <DialogTitle>{editingIndex !== null ? 'Edit Line Item' : 'Add New Line Item'}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -612,6 +465,7 @@ const LineItems: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      <Footer onClickPrimary={onClickSave} onClickSecondary={() => {}} />
     </>
   );
 };

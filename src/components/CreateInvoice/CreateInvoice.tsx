@@ -23,7 +23,7 @@ function CreateInvoice() {
   };
 
   const onSaveProceed = () => {
-    navigate('/add-line-items');
+    navigate('/line-items');
   };
 
   const onInputName = (e: React.ChangeEvent<HTMLInputElement>) => {

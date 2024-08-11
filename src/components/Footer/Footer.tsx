@@ -1,7 +1,10 @@
 import React from 'react';
 import { Box, Button, Grid } from '@mui/material';
-
-const Footer: React.FC = () => {
+interface FooterProps {
+  onClickPrimary: () => void;
+  onClickSecondary: () => void;
+}
+const Footer = ({ onClickPrimary, onClickSecondary }: FooterProps) => {
   return (
     <Box
       sx={{
@@ -15,15 +18,15 @@ const Footer: React.FC = () => {
         zIndex: 1000,
       }}
     >
-      <Grid container justifyContent='flex-end' spacing={2}>
+      <Grid paddingRight={4} container justifyContent='flex-end' spacing={2}>
         <Grid item>
-          <Button variant='outlined' color='primary'>
-            Cancel
+          <Button variant='outlined' color='secondary' onClick={onClickSecondary}>
+            Discard
           </Button>
         </Grid>
         <Grid item>
-          <Button variant='contained' color='primary'>
-            Save
+          <Button variant='contained' color='primary' onClick={onClickPrimary}>
+            Save and Preview
           </Button>
         </Grid>
       </Grid>
