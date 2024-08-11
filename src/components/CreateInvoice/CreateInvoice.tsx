@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchCustomers } from '../../store/getCustomerSlice';
 import Header from '../Header/Header';
 import { setCustomerDetails } from '../../store/invoiceDraftSlice';
+import { useNavigate } from 'react-router-dom';
 
 function CreateInvoice() {
   const { customers, loading, selectedCustomer } = useAppSelector((state) => ({
@@ -11,6 +12,7 @@ function CreateInvoice() {
     selectedCustomer: state.invoiceDraft.customer,
   }));
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const onSearchCustomer = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(fetchCustomers(e.target.value));
@@ -18,6 +20,10 @@ function CreateInvoice() {
 
   const onSelectCustomer = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setCustomerDetails(customers.find((o) => o.name === e.target.value)));
+  };
+
+  const onSaveProceed = () => {
+    navigate('/add-line-items');
   };
 
   const onInputName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +68,10 @@ function CreateInvoice() {
         value={selectedCustomer?.address}
       />
       <></>
-      <Button>Save and Proceed</Button>
+      <Button variant='contained'>Back</Button>
+      <Button variant='contained' onClick={onSaveProceed}>
+        Save and Proceed
+      </Button>
     </>
   );
 }
