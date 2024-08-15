@@ -1,10 +1,10 @@
-import React from 'react';
 import { Box, Button, Grid } from '@mui/material';
 interface FooterProps {
   onClickPrimary: () => void;
   onClickSecondary: () => void;
+  shouldDisablePrimary: boolean;
 }
-const Footer = ({ onClickPrimary, onClickSecondary }: FooterProps) => {
+const Footer = ({ onClickPrimary, onClickSecondary, shouldDisablePrimary }: FooterProps) => {
   return (
     <Box
       sx={{
@@ -25,7 +25,12 @@ const Footer = ({ onClickPrimary, onClickSecondary }: FooterProps) => {
           </Button>
         </Grid>
         <Grid item>
-          <Button variant='contained' color='primary' onClick={onClickPrimary}>
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={onClickPrimary}
+            disabled={shouldDisablePrimary}
+          >
             Save and Preview
           </Button>
         </Grid>
