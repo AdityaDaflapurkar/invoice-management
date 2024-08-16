@@ -23,8 +23,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import Footer from '../Footer/Footer';
-import Header from '../Header/Header';
+import Footer, { FooterButton } from '../Common/Footer/Footer';
+import Header from '../Common/Header/Header';
 import { useNavigate } from 'react-router-dom';
 import { Edit } from '@mui/icons-material';
 
@@ -153,6 +153,20 @@ const LineItems: React.FC = () => {
     setNewItem(lineItems[index]); // Populate dialog with existing data
     handleDialogOpen();
   };
+
+  const onSaveProceed = () => {
+    navigate('/preview');
+  };
+
+  const getFooterPrimaryProps = (): FooterButton => {
+    return {
+      text: 'Save and Proceed',
+      action: onSaveProceed,
+      disabled: false,
+    };
+  };
+
+  const footerPrimaryProps: FooterButton = getFooterPrimaryProps();
 
   return (
     <>
@@ -473,7 +487,7 @@ const LineItems: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Footer onClickPrimary={onClickSave} onClickSecondary={() => {}} />
+      <Footer primary={footerPrimaryProps} />
     </>
   );
 };

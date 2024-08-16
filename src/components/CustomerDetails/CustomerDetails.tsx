@@ -1,14 +1,14 @@
 import { Autocomplete, Box, Grid, TextField, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchCustomers } from '../../store/getCustomerSlice';
-import Header from '../Header/Header';
+import Header from '../Common/Header/Header';
 import {
   clearCustomerDetails,
   setCustomerDetails,
   setIsExistingCustomer,
 } from '../../store/invoiceDraftSlice';
 import { useNavigate } from 'react-router-dom';
-import Footer from '../Footer/Footer';
+import Footer, { FooterButton } from '../Common/Footer/Footer';
 
 function CreateInvoice() {
   const { customers, loading, selectedCustomer, isExistingCustomer } = useAppSelector((state) => ({
@@ -45,6 +45,14 @@ function CreateInvoice() {
     navigate('/line-items');
   };
 
+  const getFooterPrimaryProps = (): FooterButton => {
+    return {
+      text: 'Save and Proceed',
+      action: onSaveProceed,
+      disabled: shouldDisablePrimary,
+    };
+  };
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSearchInputChange = (e: any) => {
     if (e.target.value === undefined) {
@@ -53,6 +61,8 @@ function CreateInvoice() {
       dispatch(setIsExistingCustomer(false));
     }
   };
+
+  const footerPrimaryProps = getFooterPrimaryProps();
 
   return (
     <>
@@ -157,11 +167,7 @@ function CreateInvoice() {
           </Grid>
         </Grid>
       </Box>
-      <Footer
-        onClickPrimary={onSaveProceed}
-        shouldDisablePrimary={shouldDisablePrimary}
-        onClickSecondary={() => {}}
-      ></Footer>
+      <Footer primary={footerPrimaryProps}></Footer>
     </>
   );
 }

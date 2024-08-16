@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography, Paper } from '@mui/material';
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
+import Header from '../Common/Header/Header';
+import Footer from '../Common/Footer/Footer';
 import { useNavigate } from 'react-router-dom';
 
 interface VendorInfoProps {
@@ -22,7 +22,7 @@ const VendorInfo: React.FC<VendorInfoProps> = ({ name, address, phoneNumber }) =
       <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
         <Box sx={{ padding: 2 }}>
           <Typography variant='h6' gutterBottom>
-            Vendor Details
+            Verify Vendor Details
           </Typography>
           <Typography variant='body1'>
             <strong>Name:</strong> {name}

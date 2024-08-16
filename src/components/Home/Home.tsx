@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import Header from '../Header/Header';
+import Header from '../Common/Header/Header';
 import './Home.scss';
 import { useNavigate } from 'react-router-dom';
 function Home() {
