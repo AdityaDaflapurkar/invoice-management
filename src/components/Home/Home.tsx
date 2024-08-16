@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 function Home() {
   const navigate = useNavigate();
   const onClickCreateInvoice = () => {
-    navigate('/create-invoice');
+    navigate('/vendor-info');
   };
 
   return (
@@ -14,6 +14,10 @@ function Home() {
       <Button variant='contained' className='create-new-invoice' onClick={onClickCreateInvoice}>
         Create new invoice
       </Button>
+      <Button variant='contained' className='create-new-invoice' onClick={onClickCreateInvoice}>
+        Create existing draft
+      </Button>
+      <></>
     </>
   );
 }

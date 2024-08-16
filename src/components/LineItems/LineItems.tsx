@@ -167,7 +167,7 @@ const LineItems: React.FC = () => {
         Add New Item
       </Button>
       <TableContainer component={Paper}>
-        <Table aria-label='collapsible table'>
+        <Table aria-label='collapsible table' style={{ border: '1px solid, black' }}>
           <TableHead>
             <TableRow>
               <TableCell />
@@ -220,7 +220,11 @@ const LineItems: React.FC = () => {
                             <Typography variant='h6' gutterBottom component='div'>
                               Discounts
                             </Typography>
-                            <Table size='small' aria-label='discounts'>
+                            <Table
+                              size='small'
+                              aria-label='discounts'
+                              style={{ border: '2px solid grey' }}
+                            >
                               <TableHead>
                                 <TableRow>
                                   <TableCell>Description</TableCell>
@@ -244,7 +248,11 @@ const LineItems: React.FC = () => {
                             <Typography variant='h6' gutterBottom component='div'>
                               Taxes
                             </Typography>
-                            <Table size='small' aria-label='taxes'>
+                            <Table
+                              size='small'
+                              aria-label='taxes'
+                              style={{ border: '2px solid grey' }}
+                            >
                               <TableHead>
                                 <TableRow>
                                   <TableCell>Description</TableCell>
