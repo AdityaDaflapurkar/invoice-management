@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography, Paper } from '@mui/material';
 import Header from '../Common/Header/Header';
-import Footer from '../Common/Footer/Footer';
+import Footer, { FooterButton } from '../Common/Footer/Footer';
 import { useNavigate } from 'react-router-dom';
 
 interface VendorInfoProps {
@@ -12,9 +12,19 @@ interface VendorInfoProps {
 
 const VendorInfo: React.FC<VendorInfoProps> = ({ name, address, phoneNumber }) => {
   const navigate = useNavigate();
-  const onClickSave = () => {
+  const onSaveProceed = () => {
     navigate('/create-invoice');
   };
+
+  const getFooterPrimaryProps = (): FooterButton => {
+    return {
+      text: 'Save and Proceed',
+      action: onSaveProceed,
+      disabled: false,
+    };
+  };
+
+  const footerPrimaryProps = getFooterPrimaryProps();
 
   return (
     <>
@@ -35,11 +45,7 @@ const VendorInfo: React.FC<VendorInfoProps> = ({ name, address, phoneNumber }) =
           </Typography>
         </Box>
       </Paper>
-      <Footer
-        onClickPrimary={onClickSave}
-        shouldDisablePrimary={false}
-        onClickSecondary={() => {}}
-      ></Footer>
+      <Footer primary={footerPrimaryProps}></Footer>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -6,112 +6,135 @@ import {
   DialogActions,
   Button,
   TextField,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Select,
-  IconButton,
-  Grid,
   Typography,
+  Grid,
+  FormControl,
+  Select,
+  MenuItem,
+  IconButton,
+  InputLabel,
 } from '@mui/material';
+import { Discount, LineItem, Tax } from '../../utils/types';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-interface Tax {
-  type: string;
-  amount: number;
-}
-
-interface Discount {
-  type: string;
-  amount: number;
-}
-
-interface LineItem {
-  description: string;
-  quantity: number;
-  unit_price: number;
-  total_price: number;
-  taxes: Tax[];
-  discounts: Discount[];
-  discounted_price: number;
-}
 
 interface LineItemDialogProps {
   open: boolean;
   onClose: () => void;
   onSave: (lineItem: LineItem) => void;
+  currentItem: LineItem | null;
 }
 
-const taxCategories = ['CGST', 'SGST', 'IGST', 'CESS'];
+const taxCategories = ['Tax 1', 'Tax 2', 'Tax 3', 'Tax 4', 'Tax 5'];
 const discountCategories = ['Seasonal Offer', 'Clearance Sale', 'Bulk Purchase'];
 
-const LineItemDialog: React.FC<LineItemDialogProps> = ({ open, onClose, onSave }) => {
-  const [description, setDescription] = useState<string>('');
-  const [quantity, setQuantity] = useState<number>(1);
-  const [unitPrice, setUnitPrice] = useState<number>(0);
-  const [taxes, setTaxes] = useState<Tax[]>([{ type: taxCategories[0], amount: 0 }]);
-  const [discounts, setDiscounts] = useState<Discount[]>([
-    { type: discountCategories[0], amount: 0 },
-  ]);
+const LineItemDialog: React.FC<LineItemDialogProps> = (props) => {
+  const { open, onClose, onSave } = props;
+
+  const [description, setDescription] = useState('');
+  const [quantity, setQuantity] = useState(0);
+  const [unitPrice, setUnitPrice] = useState(0);
+  const [taxes, setTaxes] = useState<Tax[]>([]);
+  const [discounts, setDiscounts] = useState<Discount[]>([]);
+  const [availableTaxes, setAvailableTaxes] = useState(taxCategories);
+  const [availableDiscounts, setAvailableDiscounts] = useState(discountCategories);
+  const [currentDiscount, setCurrentDiscount] = useState<Discount>(null);
+
+  useEffect(() => {
+    if (props.currentItem) {
+      setDescription(props.currentItem.description);
+      setQuantity(props.currentItem.quantity);
+      setUnitPrice(props.currentItem.unit_price);
+      setTaxes(props.currentItem.taxes);
+      setDiscounts(props.currentItem.discounts);
+    } else {
+      setDescription('');
+      setQuantity(0);
+      setUnitPrice(0);
+      setTaxes([]);
+      setDiscounts([]);
+    }
+  }, [props.currentItem]);
+  const id = props.currentItem?.id || 'line_item_' + Date.now();
 
   const calculateTotals = () => {
     const totalPrice = quantity * unitPrice;
-    const totalTaxAmount = taxes.reduce((acc, tax) => acc + tax.amount, 0);
-    const totalDiscountAmount = discounts.reduce((acc, discount) => acc + discount.amount, 0);
-    const discountedPrice = totalPrice + totalTaxAmount - totalDiscountAmount;
+    const totalTaxPercent = taxes.reduce((acc, tax) => acc + tax.taxPercent, 0);
+    const totalDiscountPercent = discounts.reduce(
+      (acc, discount) => acc + discount.discountPercent,
+      0,
+    );
+    const discountedPrice = totalPrice - (totalDiscountPercent * totalPrice) / 100;
+    const finalPrice = discountedPrice + (totalTaxPercent * discountedPrice) / 100;
 
     return {
       totalPrice,
-      discountedPrice,
+      finalPrice,
     };
   };
 
   const handleSave = () => {
-    const { totalPrice, discountedPrice } = calculateTotals();
+    const { totalPrice, finalPrice } = calculateTotals();
 
-    const newLineItem: LineItem = {
+    const updatedLineItem: LineItem = {
+      id,
       description,
       quantity,
       unit_price: unitPrice,
       total_price: totalPrice,
+      final_price: finalPrice,
       taxes,
       discounts,
-      discounted_price: discountedPrice,
     };
 
-    onSave(newLineItem);
+    onSave(updatedLineItem);
     onClose();
   };
 
+  function handleAddDiscount(): void {
+    setDiscounts(
+      discounts.concat({
+        description: availableDiscounts[0],
+        discountPercent: 0,
+      }),
+    );
+  }
+
+  function handleDiscountDescriptionChange(index: number, value: string): void {
+    const discountsCopy = JSON.parse(JSON.stringify(discounts));
+    discountsCopy[index].description = value;
+    setDiscounts(discountsCopy);
+  }
+
+  function handleDiscountPercentChange(index: number, value: string): void {
+    const discountsCopy = JSON.parse(JSON.stringify(discounts));
+    discountsCopy[index].discountPercent = +value;
+    setDiscounts(discountsCopy);
+  }
+
+  function handleRemoveDiscount(index: number): void {
+    setDiscounts(discounts.filter((_, discountIndex) => discountIndex !== index));
+  }
+
   const handleAddTax = () => {
-    setTaxes([...taxes, { type: taxCategories[0], amount: 0 }]);
+    setTaxes([...taxes, { description: taxCategories[0], taxPercent: 0 }]);
   };
+
+  function handleTaxDescriptionChange(index: number, value: string): void {
+    const taxesCopy = JSON.parse(JSON.stringify(taxes));
+    taxesCopy[index].description = value;
+    setTaxes(taxesCopy);
+  }
+
+  function handleTaxPercentChange(index: number, value: string): void {
+    const taxesCopy = JSON.parse(JSON.stringify(taxes));
+    taxesCopy[index].taxPercent = +value;
+    setTaxes(taxesCopy);
+  }
 
   const handleRemoveTax = (index: number) => {
     const updatedTaxes = taxes.filter((_, i) => i !== index);
     setTaxes(updatedTaxes);
-  };
-
-  const handleTaxChange = (index: number, field: 'type' | 'amount', value: any) => {
-    const updatedTaxes: Tax[] = [...taxes];
-    //updatedTaxes[index][field] = field === 'amount' ? parseFloat(value) : value;
-    setTaxes(updatedTaxes);
-  };
-
-  const handleAddDiscount = () => {
-    setDiscounts([...discounts, { type: discountCategories[0], amount: 0 }]);
-  };
-
-  const handleRemoveDiscount = (index: number) => {
-    const updatedDiscounts = discounts.filter((_, i) => i !== index);
-    setDiscounts(updatedDiscounts);
-  };
-
-  const handleDiscountChange = (index: number, field: 'type' | 'amount', value: any) => {
-    const updatedDiscounts = [...discounts];
-    //updatedDiscounts[index][field] = field === 'amount' ? parseFloat(value) : value;
-    setDiscounts(updatedDiscounts);
   };
 
   return (
@@ -122,7 +145,6 @@ const LineItemDialog: React.FC<LineItemDialogProps> = ({ open, onClose, onSave }
           autoFocus
           margin='dense'
           label='Description'
-          fullWidth
           variant='standard'
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -131,7 +153,6 @@ const LineItemDialog: React.FC<LineItemDialogProps> = ({ open, onClose, onSave }
           margin='dense'
           label='Quantity'
           type='number'
-          fullWidth
           variant='standard'
           value={quantity}
           onChange={(e) => setQuantity(parseInt(e.target.value, 10))}
@@ -140,7 +161,6 @@ const LineItemDialog: React.FC<LineItemDialogProps> = ({ open, onClose, onSave }
           margin='dense'
           label='Unit Price ($)'
           type='number'
-          fullWidth
           variant='standard'
           value={unitPrice}
           onChange={(e) => setUnitPrice(parseFloat(e.target.value))}
@@ -155,8 +175,8 @@ const LineItemDialog: React.FC<LineItemDialogProps> = ({ open, onClose, onSave }
               <FormControl fullWidth margin='dense'>
                 <InputLabel>Tax Type</InputLabel>
                 <Select
-                  value={tax.type}
-                  onChange={(e) => handleTaxChange(index, 'type', e.target.value)}
+                  value={tax.description}
+                  onChange={(e) => handleTaxDescriptionChange(index, e.target.value)}
                   variant='standard'
                 >
                   {taxCategories.map((category) => (
@@ -170,12 +190,13 @@ const LineItemDialog: React.FC<LineItemDialogProps> = ({ open, onClose, onSave }
             <Grid item xs={4}>
               <TextField
                 margin='dense'
-                label='Amount ($)'
+                label='Amount (%)'
                 type='number'
                 fullWidth
+                InputLabelProps={{ shrink: true }}
                 variant='standard'
-                value={tax.amount}
-                onChange={(e) => handleTaxChange(index, 'amount', e.target.value)}
+                value={tax.taxPercent}
+                onChange={(e) => handleTaxPercentChange(index, e.target.value)}
               />
             </Grid>
             <Grid item xs={2}>
@@ -200,14 +221,14 @@ const LineItemDialog: React.FC<LineItemDialogProps> = ({ open, onClose, onSave }
         {discounts.map((discount, index) => (
           <Grid container spacing={2} key={index} alignItems='center'>
             <Grid item xs={6}>
-              <FormControl fullWidth>
+              <FormControl>
                 <InputLabel>Discount Type</InputLabel>
                 <Select
-                  value={discount.type}
-                  onChange={(e) => handleDiscountChange(index, 'type', e.target.value)}
+                  value={discount.description}
+                  onChange={(e) => handleDiscountDescriptionChange(index, e.target.value)}
                   variant='standard'
                 >
-                  {discountCategories.map((category) => (
+                  {availableDiscounts.map((category) => (
                     <MenuItem key={category} value={category}>
                       {category}
                     </MenuItem>
@@ -222,8 +243,8 @@ const LineItemDialog: React.FC<LineItemDialogProps> = ({ open, onClose, onSave }
                 type='number'
                 fullWidth
                 variant='standard'
-                value={discount.amount}
-                onChange={(e) => handleDiscountChange(index, 'amount', e.target.value)}
+                value={discount.discountPercent}
+                onChange={(e) => handleDiscountPercentChange(index, e.target.value)}
               />
             </Grid>
             <Grid item xs={2}>

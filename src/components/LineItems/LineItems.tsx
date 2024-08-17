@@ -13,11 +13,6 @@ import {
   Typography,
   Grid,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -27,72 +22,20 @@ import Footer, { FooterButton } from '../Common/Footer/Footer';
 import Header from '../Common/Header/Header';
 import { useNavigate } from 'react-router-dom';
 import { Edit } from '@mui/icons-material';
-
-interface Discount {
-  description: string;
-  discountPercent: number;
-  discountRate: number;
-}
-
-interface Tax {
-  description: string;
-  taxPercent: number;
-  taxRate: number;
-}
-
-interface LineItem {
-  description: string;
-  quantity: number;
-  unit_price: number;
-  total_price: number;
-  final_price: number;
-  discounts: Discount[];
-  taxes: Tax[];
-}
-
-const initialLineItems: LineItem[] = [
-  {
-    description: 'Product A',
-    quantity: 10,
-    unit_price: 15.0,
-    total_price: 150.0,
-    final_price: 130.0,
-    discounts: [{ description: 'Seasonal Discount', discountPercent: 10, discountRate: 15 }],
-    taxes: [
-      { description: 'CGST', taxPercent: 5, taxRate: 7.5 },
-      { description: 'SGST', taxPercent: 5, taxRate: 7.5 },
-    ],
-  },
-  {
-    description: 'Product B',
-    quantity: 5,
-    unit_price: 20.0,
-    total_price: 100.0,
-    final_price: 95.0,
-    discounts: [{ description: 'Festive Offer', discountPercent: 5, discountRate: 5 }],
-    taxes: [{ description: 'GST', taxPercent: 12, taxRate: 12 }],
-  },
-];
+import { LineItem } from '../../utils/types';
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import LineItemDialog from './LineItemDialog';
+import { addLineItem, removeLineItem, updateLineItem } from '../../store/invoiceDraftSlice';
+// import LineItemDialog from './LineItemDialog';
 
 const LineItems: React.FC = () => {
   const navigate = useNavigate();
-  const [lineItems, setLineItems] = useState<LineItem[]>(initialLineItems);
+  const lineItems = useAppSelector((state) => state.invoiceDraft.lineItems);
+  const dispatch = useAppDispatch();
   const [openRows, setOpenRows] = useState<number[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [newItem, setNewItem] = useState<LineItem>({
-    description: '',
-    quantity: 0,
-    unit_price: 0,
-    total_price: 0,
-    final_price: 0,
-    discounts: [],
-    taxes: [],
-  });
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-
-  const onClickSave = () => {
-    navigate('/preview-save');
-  };
+  const [currentItem, setCurrentItem] = useState<LineItem | null>(null);
+  console.log('ll' + JSON.stringify(lineItems));
 
   const handleRowToggle = (index: number) => {
     setOpenRows((prevOpenRows) =>
@@ -102,8 +45,8 @@ const LineItems: React.FC = () => {
     );
   };
 
-  const handleDelete = (index: number) => {
-    setLineItems((prevLineItems) => prevLineItems.filter((_, i) => i !== index));
+  const onDeleteLineItem = (item: LineItem) => {
+    dispatch(removeLineItem(item));
   };
 
   const handleDialogOpen = () => {
@@ -111,51 +54,34 @@ const LineItems: React.FC = () => {
   };
 
   const handleDialogClose = () => {
-    setEditingIndex(null);
+    setCurrentItem(null);
     setDialogOpen(false);
-    setNewItem({
-      description: '',
-      quantity: 0,
-      unit_price: 0,
-      total_price: 0,
-      final_price: 0,
-      discounts: [],
-      taxes: [],
-    });
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setNewItem((prevItem) => ({
-      ...prevItem,
-      [name]: value,
-    }));
-  };
-
-  const handleSave = () => {
-    if (newItem.description) {
-      if (editingIndex !== null) {
-        // Edit existing item
-        setLineItems((prevLineItems) =>
-          prevLineItems.map((item, index) =>
-            index === editingIndex ? (newItem as LineItem) : item,
-          ),
+  const handleSaveItem = (updatedItem: LineItem) => {
+    if (updatedItem && updatedItem.description) {
+      const itemIndex = lineItems.findIndex((item) => item.id === updatedItem.id);
+      if (itemIndex >= 0) {
+        dispatch(
+          updateLineItem({
+            index: itemIndex,
+            data: updatedItem,
+          }),
         );
       } else {
-        setLineItems((prevLineItems) => [...prevLineItems, newItem as LineItem]);
+        dispatch(addLineItem(updatedItem));
       }
       handleDialogClose();
     }
   };
 
-  const handleEdit = (index: number) => {
-    setEditingIndex(index);
-    setNewItem(lineItems[index]); // Populate dialog with existing data
+  const handleEdit = (item: LineItem) => {
+    setCurrentItem(item);
     handleDialogOpen();
   };
 
   const onSaveProceed = () => {
-    navigate('/preview');
+    navigate('/preview-save');
   };
 
   const getFooterPrimaryProps = (): FooterButton => {
@@ -198,17 +124,19 @@ const LineItems: React.FC = () => {
               <React.Fragment key={index}>
                 <TableRow>
                   <TableCell>
-                    <IconButton
-                      aria-label='expand row'
-                      size='small'
-                      onClick={() => handleRowToggle(index)}
-                    >
-                      {openRows.includes(index) ? (
-                        <KeyboardArrowUpIcon />
-                      ) : (
-                        <KeyboardArrowDownIcon />
-                      )}
-                    </IconButton>
+                    {(item.discounts.length > 0 || item.taxes.length > 0) && (
+                      <IconButton
+                        aria-label='expand row'
+                        size='small'
+                        onClick={() => handleRowToggle(index)}
+                      >
+                        {openRows.includes(index) ? (
+                          <KeyboardArrowUpIcon />
+                        ) : (
+                          <KeyboardArrowDownIcon />
+                        )}
+                      </IconButton>
+                    )}
                   </TableCell>
                   <TableCell>{item.description}</TableCell>
                   <TableCell>{item.quantity}</TableCell>
@@ -216,10 +144,10 @@ const LineItems: React.FC = () => {
                   <TableCell>{(+item.total_price)?.toFixed(2)}</TableCell>
                   <TableCell>{(+item.final_price)?.toFixed(2)}</TableCell>
                   <TableCell>
-                    <IconButton onClick={() => handleEdit(index)} color='primary'>
+                    <IconButton onClick={() => handleEdit(item)} color='primary'>
                       <Edit />
                     </IconButton>
-                    <IconButton onClick={() => handleDelete(index)} color='error'>
+                    <IconButton onClick={() => onDeleteLineItem(item)} color='error'>
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>
@@ -229,62 +157,60 @@ const LineItems: React.FC = () => {
                     <Collapse in={openRows.includes(index)} timeout='auto' unmountOnExit>
                       <Box margin={1}>
                         <Grid container spacing={2}>
-                          {/* Discount Table */}
-                          <Grid item xs={12} md={6}>
-                            <Typography variant='h6' gutterBottom component='div'>
-                              Discounts
-                            </Typography>
-                            <Table
-                              size='small'
-                              aria-label='discounts'
-                              style={{ border: '2px solid grey' }}
-                            >
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell>Description</TableCell>
-                                  <TableCell>Discount %</TableCell>
-                                  <TableCell>Discount Rate ($)</TableCell>
-                                </TableRow>
-                              </TableHead>
-                              <TableBody>
-                                {item.discounts.map((discount, discountIndex) => (
-                                  <TableRow key={discountIndex}>
-                                    <TableCell>{discount.description}</TableCell>
-                                    <TableCell>{discount.discountPercent.toFixed(2)}%</TableCell>
-                                    <TableCell>{discount.discountRate.toFixed(2)}</TableCell>
+                          {item.discounts.length > 0 && (
+                            <Grid item xs={12} md={6}>
+                              <Typography variant='h6' gutterBottom component='div'>
+                                Discounts
+                              </Typography>
+                              <Table
+                                size='small'
+                                aria-label='discounts'
+                                style={{ border: '2px solid grey' }}
+                              >
+                                <TableHead>
+                                  <TableRow>
+                                    <TableCell>Description</TableCell>
+                                    <TableCell>Discount %</TableCell>
                                   </TableRow>
-                                ))}
-                              </TableBody>
-                            </Table>
-                          </Grid>
-                          {/* Tax Table */}
-                          <Grid item xs={12} md={6}>
-                            <Typography variant='h6' gutterBottom component='div'>
-                              Taxes
-                            </Typography>
-                            <Table
-                              size='small'
-                              aria-label='taxes'
-                              style={{ border: '2px solid grey' }}
-                            >
-                              <TableHead>
-                                <TableRow>
-                                  <TableCell>Description</TableCell>
-                                  <TableCell>Tax %</TableCell>
-                                  <TableCell>Tax Rate ($)</TableCell>
-                                </TableRow>
-                              </TableHead>
-                              <TableBody>
-                                {item.taxes.map((tax, taxIndex) => (
-                                  <TableRow key={taxIndex}>
-                                    <TableCell>{tax.description}</TableCell>
-                                    <TableCell>{tax.taxPercent.toFixed(2)}%</TableCell>
-                                    <TableCell>{tax.taxRate.toFixed(2)}</TableCell>
+                                </TableHead>
+                                <TableBody>
+                                  {item.discounts.map((discount, discountIndex) => (
+                                    <TableRow key={discountIndex}>
+                                      <TableCell>{discount.description}</TableCell>
+                                      <TableCell>{discount.discountPercent.toFixed(2)}%</TableCell>
+                                    </TableRow>
+                                  ))}
+                                </TableBody>
+                              </Table>
+                            </Grid>
+                          )}
+                          {item.taxes.length > 0 && (
+                            <Grid item xs={12} md={6}>
+                              <Typography variant='h6' gutterBottom component='div'>
+                                Taxes
+                              </Typography>
+                              <Table
+                                size='small'
+                                aria-label='taxes'
+                                style={{ border: '2px solid grey' }}
+                              >
+                                <TableHead>
+                                  <TableRow>
+                                    <TableCell>Description</TableCell>
+                                    <TableCell>Tax %</TableCell>
                                   </TableRow>
-                                ))}
-                              </TableBody>
-                            </Table>
-                          </Grid>
+                                </TableHead>
+                                <TableBody>
+                                  {item.taxes.map((tax, taxIndex) => (
+                                    <TableRow key={taxIndex}>
+                                      <TableCell>{tax.description}</TableCell>
+                                      <TableCell>{tax.taxPercent.toFixed(2)}%</TableCell>
+                                    </TableRow>
+                                  ))}
+                                </TableBody>
+                              </Table>
+                            </Grid>
+                          )}
                         </Grid>
                       </Box>
                     </Collapse>
@@ -295,198 +221,14 @@ const LineItems: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Dialog open={dialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>{editingIndex !== null ? 'Edit Line Item' : 'Add New Line Item'}</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin='dense'
-            name='description'
-            label='Description'
-            type='text'
-            fullWidth
-            variant='standard'
-            value={newItem.description || ''}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin='dense'
-            name='quantity'
-            label='Quantity'
-            type='number'
-            fullWidth
-            variant='standard'
-            value={newItem.quantity || ''}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin='dense'
-            name='unit_price'
-            label='Unit Price ($)'
-            type='number'
-            fullWidth
-            variant='standard'
-            value={newItem.unit_price || ''}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin='dense'
-            name='total_price'
-            label='Total Price ($)'
-            type='number'
-            fullWidth
-            variant='standard'
-            value={newItem.total_price || ''}
-            onChange={handleInputChange}
-          />
-          <TextField
-            margin='dense'
-            name='final_price'
-            label='Final Price ($)'
-            type='number'
-            fullWidth
-            variant='standard'
-            value={newItem.final_price || ''}
-            onChange={handleInputChange}
-          />
-          <Typography variant='h6' gutterBottom component='div'>
-            Discounts
-          </Typography>
-          {/* Add UI for entering discounts */}
-          {/* For simplicity, just one discount input */}
-          <TextField
-            margin='dense'
-            name='discount_description'
-            label='Discount Description'
-            type='text'
-            fullWidth
-            variant='standard'
-            value={(newItem.discounts || [{}])[0]?.description || ''}
-            onChange={(e) =>
-              setNewItem((prevItem) => ({
-                ...prevItem,
-                discounts: [
-                  {
-                    ...((prevItem.discounts || [{}])[0] || {}),
-                    description: e.target.value,
-                  },
-                ],
-              }))
-            }
-          />
-          <TextField
-            margin='dense'
-            name='discount_percent'
-            label='Discount %'
-            type='number'
-            fullWidth
-            variant='standard'
-            value={(newItem.discounts || [{}])[0]?.discountPercent || ''}
-            onChange={(e) =>
-              setNewItem((prevItem) => ({
-                ...prevItem,
-                discounts: [
-                  {
-                    ...((prevItem.discounts || [{}])[0] || {}),
-                    discountPercent: parseFloat(e.target.value),
-                  },
-                ],
-              }))
-            }
-          />
-          <TextField
-            margin='dense'
-            name='discount_rate'
-            label='Discount Rate ($)'
-            type='number'
-            fullWidth
-            variant='standard'
-            value={(newItem.discounts || [{}])[0]?.discountRate || ''}
-            onChange={(e) =>
-              setNewItem((prevItem) => ({
-                ...prevItem,
-                discounts: [
-                  {
-                    ...((prevItem.discounts || [{}])[0] || {}),
-                    discountRate: parseFloat(e.target.value),
-                  },
-                ],
-              }))
-            }
-          />
-          <Typography variant='h6' gutterBottom component='div'>
-            Taxes
-          </Typography>
-          {/* Add UI for entering taxes */}
-          {/* For simplicity, just one tax input */}
-          <TextField
-            margin='dense'
-            name='tax_description'
-            label='Tax Description'
-            type='text'
-            fullWidth
-            variant='standard'
-            value={(newItem.taxes || [{}])[0]?.description || ''}
-            onChange={(e) =>
-              setNewItem((prevItem) => ({
-                ...prevItem,
-                taxes: [
-                  {
-                    ...((prevItem.taxes || [{}])[0] || {}),
-                    description: e.target.value,
-                  },
-                ],
-              }))
-            }
-          />
-          <TextField
-            margin='dense'
-            name='tax_percent'
-            label='Tax %'
-            type='number'
-            fullWidth
-            variant='standard'
-            value={(newItem.taxes || [{}])[0]?.taxPercent || ''}
-            onChange={(e) =>
-              setNewItem((prevItem) => ({
-                ...prevItem,
-                taxes: [
-                  {
-                    ...((prevItem.taxes || [{}])[0] || {}),
-                    taxPercent: parseFloat(e.target.value),
-                  },
-                ],
-              }))
-            }
-          />
-          <TextField
-            margin='dense'
-            name='tax_rate'
-            label='Tax Rate ($)'
-            type='number'
-            fullWidth
-            variant='standard'
-            value={(newItem.taxes || [{}])[0]?.taxRate || ''}
-            onChange={(e) =>
-              setNewItem((prevItem) => ({
-                ...prevItem,
-                taxes: [
-                  {
-                    ...((prevItem.taxes || [{}])[0] || {}),
-                    taxRate: parseFloat(e.target.value),
-                  },
-                ],
-              }))
-            }
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
-          <Button onClick={handleSave} color='primary'>
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+
+      <LineItemDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        onSave={handleSaveItem}
+        currentItem={currentItem}
+      />
+
       <Footer primary={footerPrimaryProps} />
     </>
   );
