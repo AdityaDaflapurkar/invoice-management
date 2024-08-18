@@ -1,34 +1,12 @@
 import React from 'react';
 import { Box, Typography, Paper } from '@mui/material';
-import Header from '../Common/Header/Header';
-import Footer, { FooterButton } from '../Common/Footer/Footer';
-import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../store/hooks';
 
-interface VendorInfoProps {
-  name: string;
-  address: string;
-  phoneNumber: string;
-}
-
-const VendorInfo: React.FC<VendorInfoProps> = ({ name, address, phoneNumber }) => {
-  const navigate = useNavigate();
-  const onSaveProceed = () => {
-    navigate('/create-invoice');
-  };
-
-  const getFooterPrimaryProps = (): FooterButton => {
-    return {
-      text: 'Save and Proceed',
-      action: onSaveProceed,
-      disabled: false,
-    };
-  };
-
-  const footerPrimaryProps = getFooterPrimaryProps();
+const VendorDetails: React.FC = () => {
+  const { name, address, phoneNumber } = useAppSelector((state) => state.invoiceDraft.vendor);
 
   return (
     <>
-      <Header title='Home'></Header>
       <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
         <Box sx={{ padding: 2 }}>
           <Typography variant='h6' gutterBottom>
@@ -45,9 +23,8 @@ const VendorInfo: React.FC<VendorInfoProps> = ({ name, address, phoneNumber }) =
           </Typography>
         </Box>
       </Paper>
-      <Footer primary={footerPrimaryProps}></Footer>
     </>
   );
 };
 
-export default VendorInfo;
+export default VendorDetails;
