@@ -26,7 +26,6 @@ import { LineItem } from '../../utils/types';
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import LineItemDialog from './LineItemDialog';
 import { addLineItem, removeLineItem, updateLineItem } from '../../store/invoiceDraftSlice';
-// import LineItemDialog from './LineItemDialog';
 
 const LineItems: React.FC = () => {
   const navigate = useNavigate();

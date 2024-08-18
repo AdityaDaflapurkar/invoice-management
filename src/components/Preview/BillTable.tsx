@@ -7,68 +7,89 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Box,
 } from '@mui/material';
 import { LineItem } from '../../utils/types';
 
 interface BillTableProps {
   items: LineItem[];
+  headingStyles: any;
+  contentStyles: any;
+  tableHeadingBackgroundColor: string;
+  tableBodyBackgroundColor: string;
 }
 
-const BillTable: React.FC<BillTableProps> = ({ items }) => {
+const BillTable: React.FC<BillTableProps> = ({
+  items,
+  headingStyles,
+  contentStyles,
+  tableHeadingBackgroundColor,
+  tableBodyBackgroundColor,
+}) => {
   return (
     <TableContainer component={Paper}>
       <Table>
-        <TableHead>
+        <TableHead sx={{ backgroundColor: tableHeadingBackgroundColor }}>
           <TableRow>
-            <TableCell>
-              <strong>Description</strong>
+            <TableCell sx={headingStyles}>Description</TableCell>
+            <TableCell align='right' sx={headingStyles}>
+              Quantity
             </TableCell>
-            <TableCell align='right'>
-              <strong>Quantity</strong>
+            <TableCell align='right' sx={headingStyles}>
+              Price
             </TableCell>
-            <TableCell align='right'>
-              <strong>Price</strong>
+            <TableCell align='right' sx={headingStyles}>
+              Discounts
             </TableCell>
-            <TableCell align='right'>
-              <strong>Discounts</strong>
+            <TableCell align='right' sx={headingStyles}>
+              Taxes
             </TableCell>
-            <TableCell align='right'>
-              <strong>Taxes</strong>
-            </TableCell>
-            <TableCell align='right'>
-              <strong>Discounted Price</strong>
+            <TableCell align='right' sx={headingStyles}>
+              Discounted Price
             </TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-          {items.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell>{item.description}</TableCell>
-              <TableCell align='right'>{item.quantity}</TableCell>
-              <TableCell align='right'>{item.total_price.toFixed(2)}</TableCell>
+        <TableBody sx={{ backgroundColor: tableBodyBackgroundColor }}>
+          {items.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell sx={contentStyles}>{item.description}</TableCell>
+              <TableCell align='right' sx={contentStyles}>
+                {item.quantity}
+              </TableCell>
+              <TableCell align='right' sx={contentStyles}>
+                {item.total_price.toFixed(2)}
+              </TableCell>
               <TableCell align='right'>
                 {item.discounts.map((discount) => (
-                  <div key={discount.description}>
-                    <strong>{discount.description}</strong>({discount.discountPercent}%)
-                  </div>
+                  <Box key={discount.description}>
+                    <Box sx={headingStyles}>{discount.description}</Box>
+                    <Box component='span' sx={contentStyles}>
+                      ({discount.discountPercent}%)
+                    </Box>
+                  </Box>
                 ))}
               </TableCell>
               <TableCell align='right'>
                 {item.taxes.map((tax) => (
-                  <div key={tax.description}>
-                    <strong>{tax.description}</strong>({tax.taxPercent}%)
-                  </div>
+                  <Box key={tax.description}>
+                    <Box sx={headingStyles}>{tax.description}</Box>
+                    <Box component='span' sx={contentStyles}>
+                      ({tax.taxPercent}%)
+                    </Box>
+                  </Box>
                 ))}
               </TableCell>
-              <TableCell align='right'>{item.final_price.toFixed(2)}</TableCell>
+              <TableCell align='right' sx={contentStyles}>
+                {item.final_price.toFixed(2)}
+              </TableCell>
             </TableRow>
           ))}
           <TableRow>
-            <TableCell colSpan={3} align='right'>
+            <TableCell colSpan={5} align='right'>
               <strong>Total Amount Payable</strong>
             </TableCell>
             <TableCell align='right'>
-              <strong>{130}</strong>
+              <strong>{200}</strong>
             </TableCell>
           </TableRow>
         </TableBody>

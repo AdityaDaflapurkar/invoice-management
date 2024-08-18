@@ -3,419 +3,17 @@ import { Grid, Paper, Box, Typography, TextField, MenuItem } from '@mui/material
 import BillTable from './BillTable';
 import { useAppSelector } from '../../store/hooks';
 
-const billItems = [
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-  {
-    description: 'Item 1',
-    quantity: 2,
-    price: 50,
-    discountedPrice: 45,
-  },
-  {
-    description: 'Item 2',
-    quantity: 1,
-    price: 100,
-    discountedPrice: 90,
-  },
-  {
-    description: 'Item 3',
-    quantity: 3,
-    price: 30,
-    discountedPrice: 25,
-  },
-];
-
 const InvoicePreview: React.FC = () => {
-  // State for heading styles
-  const [headingFontSize, setHeadingFontSize] = useState<number>(24);
+  const [headingFontSize, setHeadingFontSize] = useState<number>(16);
   const [headingFontColor, setHeadingFontColor] = useState<string>('#000000');
-  const [headingBgColor, setHeadingBgColor] = useState<string>('#ffffff');
-
-  // State for content styles
-  const [contentFontSize, setContentFontSize] = useState<number>(16);
+  const [contentFontSize, setContentFontSize] = useState<number>(14);
   const [contentFontColor, setContentFontColor] = useState<string>('#000000');
-  const [contentBgColor, setContentBgColor] = useState<string>('#ffffff');
+  const [backgroundColor, setBackgroundColor] = useState<string>('#ffffff');
+  const [tableHeadingBackgroundColor, setTableHeadingBackgroundColor] = useState<string>('#ffffff');
+  const [tableBodyBackgroundColor, setTableBodyBackgroundColor] = useState<string>('#ffffff');
 
   const invoiceDraft = useAppSelector((state) => state.invoiceDraft);
 
-  // Handlers for heading
   const handleHeadingFontSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setHeadingFontSize(Number(event.target.value));
   };
@@ -424,11 +22,6 @@ const InvoicePreview: React.FC = () => {
     setHeadingFontColor(event.target.value);
   };
 
-  const handleHeadingBgColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setHeadingBgColor(event.target.value);
-  };
-
-  // Handlers for content
   const handleContentFontSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContentFontSize(Number(event.target.value));
   };
@@ -437,42 +30,76 @@ const InvoicePreview: React.FC = () => {
     setContentFontColor(event.target.value);
   };
 
-  const handleContentBgColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setContentBgColor(event.target.value);
+  const handleBackgroundColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBackgroundColor(event.target.value);
   };
+
+  const handleTableHeadingBackgroundColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTableHeadingBackgroundColor(event.target.value);
+  };
+
+  const handleTableBodyBackgroundColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTableBodyBackgroundColor(event.target.value);
+  };
+
+  const getHeadingStyles = () => {
+    return {
+      color: headingFontColor,
+      fontSize: headingFontSize,
+    };
+  };
+
+  const getContentStyles = () => {
+    return {
+      color: contentFontColor,
+      fontSize: contentFontSize,
+    };
+  };
+
+  const headingStyles = getHeadingStyles();
+  const contentStyles = getContentStyles();
 
   return (
     <Grid container spacing={2}>
       <Grid container item xs={8} sx={{ height: '100vh', overflowY: 'scroll' }}>
-        <Paper elevation={3} sx={{ padding: 2, margin: 2, width: '100%' }}>
+        <Paper
+          elevation={3}
+          sx={{ padding: 2, margin: 2, width: '100%', backgroundColor: backgroundColor }}
+        >
           <Box sx={{ padding: 2 }}>
-            <Typography variant='h5' gutterBottom>
-              INVOICE
+            <Typography variant='h5' gutterBottom sx={headingStyles}>
+              Invoice
             </Typography>
-            <Typography variant='body1' gutterBottom>
+            <Typography variant='body1' gutterBottom sx={contentStyles}>
               {invoiceDraft.vendor.name}
             </Typography>
-            <Typography variant='body1' gutterBottom>
+            <Typography variant='body1' gutterBottom sx={contentStyles}>
               {invoiceDraft.vendor.address}
             </Typography>
-            <Typography variant='body1' gutterBottom>
+            <Typography variant='body1' gutterBottom sx={contentStyles}>
               {invoiceDraft.vendor.phoneNumber}
             </Typography>
-            <Typography variant='body1' gutterBottom>
-              Bill No: 12780
+            <Typography variant='body1' gutterBottom sx={headingStyles}>
+              Invoice Number
             </Typography>
-            <BillTable items={invoiceDraft.lineItems} />
-            <Box sx={{ marginTop: 20 }}>
-              <Typography variant='h6' gutterBottom>
+            <BillTable
+              items={invoiceDraft.lineItems}
+              headingStyles={headingStyles}
+              contentStyles={contentStyles}
+              tableHeadingBackgroundColor={tableHeadingBackgroundColor}
+              tableBodyBackgroundColor={tableBodyBackgroundColor}
+            />
+            <Box sx={{ marginTop: 8 }}>
+              <Typography variant='h6' gutterBottom sx={headingStyles}>
                 Customer Details
               </Typography>
-              <Typography variant='h6' gutterBottom>
+              <Typography variant='h6' gutterBottom sx={contentStyles}>
                 {invoiceDraft.customer?.name}
               </Typography>
-              <Typography variant='body1' gutterBottom>
+              <Typography variant='body1' gutterBottom sx={contentStyles}>
                 {invoiceDraft.customer?.address}
               </Typography>
-              <Typography variant='body1' gutterBottom>
+              <Typography variant='body1' gutterBottom sx={contentStyles}>
                 {invoiceDraft.customer?.contact_number}
               </Typography>
             </Box>
@@ -481,7 +108,6 @@ const InvoicePreview: React.FC = () => {
       </Grid>
       <Grid container item xs={4}>
         <Box sx={{ padding: 2 }}>
-          {/* Heading Controls */}
           <Typography variant='h6' gutterBottom>
             Heading Controls
           </Typography>
@@ -505,15 +131,6 @@ const InvoicePreview: React.FC = () => {
             onChange={handleHeadingFontColorChange}
             sx={{ marginBottom: 2, width: 200 }}
           />
-          <TextField
-            label='Background Color'
-            type='color'
-            value={headingBgColor}
-            onChange={handleHeadingBgColorChange}
-            sx={{ marginBottom: 2, width: 200 }}
-          />
-
-          {/* Content Controls */}
           <Typography variant='h6' gutterBottom>
             Content Controls
           </Typography>
@@ -538,11 +155,28 @@ const InvoicePreview: React.FC = () => {
             onChange={handleContentFontColorChange}
             sx={{ marginBottom: 2, width: 200 }}
           />
+          <Typography variant='h6' gutterBottom>
+            Layout Controls
+          </Typography>
           <TextField
             label='Background Color'
             type='color'
-            value={contentBgColor}
-            onChange={handleContentBgColorChange}
+            value={backgroundColor}
+            onChange={handleBackgroundColorChange}
+            sx={{ marginBottom: 2, width: 200 }}
+          />
+          <TextField
+            label='Table Heading Background Color'
+            type='color'
+            value={tableHeadingBackgroundColor}
+            onChange={handleTableHeadingBackgroundColorChange}
+            sx={{ marginBottom: 2, width: 200 }}
+          />
+          <TextField
+            label='Table Body Background Color'
+            type='color'
+            value={tableBodyBackgroundColor}
+            onChange={handleTableBodyBackgroundColorChange}
             sx={{ marginBottom: 2, width: 200 }}
           />
         </Box>
