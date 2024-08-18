@@ -18,3 +18,35 @@ export interface LineItem {
   discounts: Discount[];
   taxes: Tax[];
 }
+
+export interface Customer {
+  customer_id: number;
+  name: string;
+  address: string;
+  contact_number: string;
+  email: string;
+}
+
+export interface InvoiceRecord {
+  id: string;
+  customer: string;
+  total_amount: number;
+  created_date: string;
+  updated_date: string;
+}
+
+export interface InvoiceListData {
+  totalRecordCount: number;
+  records: InvoiceRecord[];
+}
+
+export interface ApiResponse<T> {
+  status: number;
+  error?: string;
+  data: T;
+}
+
+export interface PaginationData {
+  startPage: number;
+  rowsPerPage: number;
+}

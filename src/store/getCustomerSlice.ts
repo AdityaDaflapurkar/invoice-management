@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Customer, getCustomers } from '../utils';
+import { getCustomers } from '../utils';
+import { Customer } from '../utils/types';
 
 const fetchCustomers = createAsyncThunk('customers', async (customerName: string) => {
   const response = await getCustomers(customerName);

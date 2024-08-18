@@ -2,6 +2,8 @@ import { Button } from '@mui/material';
 import Header from '../Common/Header/Header';
 import './Home.scss';
 import { useNavigate } from 'react-router-dom';
+import InvoiceList from '../InvoiceList/InvoiceList';
+import TabsComponent from '../Common/Tabs/TabsComponent';
 function Home() {
   const navigate = useNavigate();
   const onClickCreateInvoice = () => {
@@ -14,10 +16,12 @@ function Home() {
       <Button variant='contained' className='create-new-invoice' onClick={onClickCreateInvoice}>
         Create new invoice
       </Button>
-      <Button variant='contained' className='create-new-invoice' onClick={onClickCreateInvoice}>
-        Create existing draft
-      </Button>
-      <></>
+      <TabsComponent
+        labelComponentMappings={[
+          { label: 'Invoices', component: <InvoiceList /> },
+          { label: 'Drafts', component: <InvoiceList /> },
+        ]}
+      />
     </>
   );
 }

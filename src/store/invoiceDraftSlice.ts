@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Customer } from '../utils';
+import { Customer } from '../utils/types';
 
 interface Discount {
   description: string;
