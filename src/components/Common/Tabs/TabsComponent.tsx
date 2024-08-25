@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Tabs, Tab } from '@mui/material';
+import { Tabs, Tab, Box } from '@mui/material';
 
 export interface LabelComponent {
   label: string;
@@ -20,7 +20,7 @@ export default function TabsComponent(props: TabsComponentProps) {
 
   return (
     <>
-      <Tabs value={value} onChange={handleChange} data-testid='tabs'>
+      <Tabs value={value} onChange={handleChange} data-testid='tabs' sx={{ height: '100%' }}>
         {labelComponentMappings.map((labelComponentMapping) => (
           <Tab
             label={labelComponentMapping.label}
@@ -29,7 +29,7 @@ export default function TabsComponent(props: TabsComponentProps) {
           />
         ))}
       </Tabs>
-      {labelComponentMappings[value].component}
+      <Box sx={{ height: 500 }}>{labelComponentMappings[value].component}</Box>
     </>
   );
 }

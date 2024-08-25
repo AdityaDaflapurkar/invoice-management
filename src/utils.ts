@@ -1,5 +1,5 @@
 import { CUSTOMERS, INVOICE_LIST } from './utils/data';
-import { ApiResponse, Customer, InvoiceListData, InvoiceRecord } from './utils/types';
+import { ApiResponse, Customer, InvoiceListData } from './utils/types';
 
 export function getCustomers(customerName: string): Promise<ApiResponse<Customer[]>> {
   return new Promise((resolve) => {
@@ -24,7 +24,7 @@ export function getInvoices(
       resolve({
         status: 200,
         data: {
-          records: INVOICE_LIST.slice(start * rowsPerPage, rowsPerPage),
+          records: INVOICE_LIST.slice(start * rowsPerPage, start * rowsPerPage + rowsPerPage),
           totalRecordCount: INVOICE_LIST.length,
         },
       });

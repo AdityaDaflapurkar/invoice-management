@@ -60,12 +60,8 @@ const CustomizeTemplate: React.FC = () => {
   const contentStyles = getContentStyles();
 
   return (
-    <Grid
-      container
-      justifyContent='center'
-      sx={{ height: '100vh', overflowY: 'scroll', background: 'grey' }}
-    >
-      <Grid container item xs={8}>
+    <Grid container spacing={2}>
+      <Grid container item xs={8} sx={{ height: '100vh', overflowY: 'scroll' }}>
         <Paper
           elevation={3}
           sx={{ padding: 2, margin: 2, width: '100%', backgroundColor: backgroundColor }}
@@ -109,6 +105,81 @@ const CustomizeTemplate: React.FC = () => {
             </Box>
           </Box>
         </Paper>
+      </Grid>
+      <Grid container item xs={4}>
+        <Box sx={{ padding: 2 }}>
+          <Typography variant='h6' gutterBottom>
+            Heading Controls
+          </Typography>
+          <TextField
+            select
+            label='Font Size'
+            value={headingFontSize}
+            onChange={handleHeadingFontSizeChange}
+            sx={{ marginBottom: 2, width: 200 }}
+          >
+            {[16, 18, 20, 24, 28, 32, 36].map((size) => (
+              <MenuItem key={size} value={size}>
+                {size}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            label='Font Color'
+            type='color'
+            value={headingFontColor}
+            onChange={handleHeadingFontColorChange}
+            sx={{ marginBottom: 2, width: 200 }}
+          />
+          <Typography variant='h6' gutterBottom>
+            Content Controls
+          </Typography>
+
+          <TextField
+            select
+            label='Font Size'
+            value={contentFontSize}
+            onChange={handleContentFontSizeChange}
+            sx={{ marginBottom: 2, width: 200 }}
+          >
+            {[12, 14, 16, 18, 20, 24, 28].map((size) => (
+              <MenuItem key={size} value={size}>
+                {size}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            label='Font Color'
+            type='color'
+            value={contentFontColor}
+            onChange={handleContentFontColorChange}
+            sx={{ marginBottom: 2, width: 200 }}
+          />
+          <Typography variant='h6' gutterBottom>
+            Layout Controls
+          </Typography>
+          <TextField
+            label='Background Color'
+            type='color'
+            value={backgroundColor}
+            onChange={handleBackgroundColorChange}
+            sx={{ marginBottom: 2, width: 200 }}
+          />
+          <TextField
+            label='Table Heading Background Color'
+            type='color'
+            value={tableHeadingBackgroundColor}
+            onChange={handleTableHeadingBackgroundColorChange}
+            sx={{ marginBottom: 2, width: 200 }}
+          />
+          <TextField
+            label='Table Body Background Color'
+            type='color'
+            value={tableBodyBackgroundColor}
+            onChange={handleTableBodyBackgroundColorChange}
+            sx={{ marginBottom: 2, width: 200 }}
+          />
+        </Box>
       </Grid>
     </Grid>
   );

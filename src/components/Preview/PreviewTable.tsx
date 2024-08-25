@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { LineItem } from '../../utils/types';
 
-interface BillTableProps {
+interface PreviewTableProps {
   items: LineItem[];
   headingStyles: any;
   contentStyles: any;
@@ -19,7 +19,7 @@ interface BillTableProps {
   tableBodyBackgroundColor: string;
 }
 
-const BillTable: React.FC<BillTableProps> = ({
+const PreviewTable: React.FC<PreviewTableProps> = ({
   items,
   headingStyles,
   contentStyles,
@@ -98,4 +98,4 @@ const BillTable: React.FC<BillTableProps> = ({
   );
 };
 
-export default BillTable;
+export default PreviewTable;
