@@ -15,20 +15,27 @@ import { useEffect, useState } from 'react';
 import { fetchInvoices } from '../../store/invoiceListSlice';
 import TablePaginationActions from '@mui/material/TablePagination/TablePaginationActions';
 import Loader from '../Common/Loader/Loader';
+import { InvoiceStage } from '../../utils/types';
 
-function InvoiceList() {
+interface InvoiceListProps {
+  stage: InvoiceStage;
+}
+
+function InvoiceList(props: InvoiceListProps) {
   const { invoiceRecords, totalInvoicesCount, isLoading } = useAppSelector((state) => ({
     invoiceRecords: state.invoiceList.records,
     totalInvoicesCount: state.invoiceList.totalRecordCount,
     isLoading: state.invoiceList.isLoading,
   }));
-  console.log(invoiceRecords + 'records!!');
+  const { stage } = props;
   const [currentRowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setPage] = useState(0);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(fetchInvoices({ startPage: 0, rowsPerPage: 10 }));
-  }, [dispatch]);
+    setPage(0);
+    setRowsPerPage(10);
+    dispatch(fetchInvoices({ startPage: 0, rowsPerPage: 10, stage }));
+  }, [dispatch, stage]);
 
   const onRowsPerPageChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -36,13 +43,18 @@ function InvoiceList() {
     const newRowsPerPage: number = parseInt(event.target.value, 10);
     setRowsPerPage(newRowsPerPage);
     setPage(0);
-    dispatch(fetchInvoices({ startPage: 0, rowsPerPage: newRowsPerPage }));
+    dispatch(fetchInvoices({ startPage: 0, rowsPerPage: newRowsPerPage, stage }));
   };
 
   const onPageChange = (_event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
-    console.log(newPage, currentRowsPerPage);
-    dispatch(fetchInvoices({ startPage: newPage, rowsPerPage: currentRowsPerPage }));
+    dispatch(
+      fetchInvoices({
+        startPage: newPage,
+        rowsPerPage: currentRowsPerPage,
+        stage,
+      }),
+    );
   };
 
   return isLoading ? (

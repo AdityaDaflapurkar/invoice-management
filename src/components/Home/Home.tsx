@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import InvoiceList from '../InvoiceList/InvoiceList';
 import TabsComponent from '../Common/Tabs/TabsComponent';
 import AddIcon from '@mui/icons-material/Add';
+import { InvoiceStage } from '../../utils/types';
 
 function Home() {
   const navigate = useNavigate();
@@ -22,8 +23,8 @@ function Home() {
       <Paper sx={{ padding: 2 }}>
         <TabsComponent
           labelComponentMappings={[
-            { label: 'Invoices', component: <InvoiceList /> },
-            { label: 'Drafts', component: <InvoiceList /> },
+            { label: 'Invoices', component: <InvoiceList stage={InvoiceStage.PRODUCTION} /> },
+            { label: 'Drafts', component: <InvoiceList stage={InvoiceStage.DRAFT} /> },
           ]}
         />
       </Paper>

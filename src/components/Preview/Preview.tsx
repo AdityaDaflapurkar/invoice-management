@@ -4,60 +4,7 @@ import BillTable from './PreviewTable';
 import { useAppSelector } from '../../store/hooks';
 
 const CustomizeTemplate: React.FC = () => {
-  const [headingFontSize, setHeadingFontSize] = useState<number>(16);
-  const [headingFontColor, setHeadingFontColor] = useState<string>('#000000');
-  const [contentFontSize, setContentFontSize] = useState<number>(14);
-  const [contentFontColor, setContentFontColor] = useState<string>('#000000');
-  const [backgroundColor, setBackgroundColor] = useState<string>('#ffffff');
-  const [tableHeadingBackgroundColor, setTableHeadingBackgroundColor] = useState<string>('#ffffff');
-  const [tableBodyBackgroundColor, setTableBodyBackgroundColor] = useState<string>('#ffffff');
-
   const invoiceDraft = useAppSelector((state) => state.invoiceDraft);
-
-  const handleHeadingFontSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setHeadingFontSize(Number(event.target.value));
-  };
-
-  const handleHeadingFontColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setHeadingFontColor(event.target.value);
-  };
-
-  const handleContentFontSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setContentFontSize(Number(event.target.value));
-  };
-
-  const handleContentFontColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setContentFontColor(event.target.value);
-  };
-
-  const handleBackgroundColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setBackgroundColor(event.target.value);
-  };
-
-  const handleTableHeadingBackgroundColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTableHeadingBackgroundColor(event.target.value);
-  };
-
-  const handleTableBodyBackgroundColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTableBodyBackgroundColor(event.target.value);
-  };
-
-  const getHeadingStyles = () => {
-    return {
-      color: headingFontColor,
-      fontSize: headingFontSize,
-    };
-  };
-
-  const getContentStyles = () => {
-    return {
-      color: contentFontColor,
-      fontSize: contentFontSize,
-    };
-  };
-
-  const headingStyles = getHeadingStyles();
-  const contentStyles = getContentStyles();
 
   return (
     <Grid

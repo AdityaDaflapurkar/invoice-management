@@ -27,6 +27,20 @@ export interface Customer {
   email: string;
 }
 
+export interface VendorInfo {
+  name: string;
+  address: string;
+  phoneNumber: string;
+}
+
+export interface DraftSliceState {
+  vendor: VendorInfo;
+  customer: Customer | null;
+  isExistingCustomer: boolean;
+  lineItems: LineItem[];
+  total: number;
+}
+
 export interface InvoiceRecord {
   id: string;
   customer: string;
@@ -49,4 +63,10 @@ export interface ApiResponse<T> {
 export interface PaginationData {
   startPage: number;
   rowsPerPage: number;
+  stage: string;
+}
+
+export enum InvoiceStage {
+  DRAFT = 'draft',
+  PRODUCTION = 'production',
 }

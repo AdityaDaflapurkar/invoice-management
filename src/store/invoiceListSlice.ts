@@ -3,8 +3,8 @@ import { getInvoices } from '../utils';
 import { PaginationData } from '../utils/types';
 
 const fetchInvoices = createAsyncThunk('invoices', async (paginationData: PaginationData) => {
-  const { startPage, rowsPerPage } = paginationData;
-  const response = await getInvoices(startPage, rowsPerPage);
+  const { startPage, rowsPerPage, stage } = paginationData;
+  const response = await getInvoices(startPage, rowsPerPage, stage);
   return response.data;
 });
 

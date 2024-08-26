@@ -1,41 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Customer } from '../utils/types';
-
-interface Discount {
-  description: string;
-  discountPercent: number;
-}
-
-interface Tax {
-  description: string;
-  taxPercent: number;
-}
-
-interface LineItem {
-  id: string;
-  description: string;
-  quantity: number;
-  unit_price: number;
-  total_price: number;
-  final_price: number;
-  discounts: Discount[];
-  taxes: Tax[];
-}
-
-interface VendorInfo {
-  name: string;
-  address: string;
-  phoneNumber: string;
-}
-
-interface DraftSliceState {
-  vendor: VendorInfo;
-  customer: Customer | null;
-  isExistingCustomer: boolean;
-  lineItems: LineItem[];
-  total: number;
-}
-
+import { Discount, DraftSliceState, LineItem } from '../utils/types';
 const initialState: DraftSliceState = {
   vendor: {
     name: 'ABC Supplies Ltd.',
