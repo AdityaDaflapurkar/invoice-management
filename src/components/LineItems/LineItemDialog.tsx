@@ -239,7 +239,7 @@ const LineItemDialog: React.FC<LineItemDialogProps> = (props) => {
             <Grid item xs={4}>
               <TextField
                 margin='dense'
-                label='Amount ($)'
+                label='Amount (%)'
                 type='number'
                 fullWidth
                 variant='standard'
