@@ -33,11 +33,20 @@ export interface VendorInfo {
   phoneNumber: string;
 }
 
+export interface ThemeData {
+  headingStyles: any;
+  contentStyles: any;
+  backgroundColor: string;
+  tableHeadingBackgroundColor: string;
+  tableBodyBackgroundColor: string;
+}
+
 export interface DraftSliceState {
   vendor: VendorInfo;
   customer: Customer | null;
   isExistingCustomer: boolean;
   lineItems: LineItem[];
+  themeData: ThemeData;
   total: number;
 }
 

@@ -80,7 +80,7 @@ const LineItems: React.FC = () => {
   };
 
   const onSaveProceed = () => {
-    navigate('/preview');
+    navigate('/customize-template');
   };
 
   const getFooterPrimaryProps = (): FooterButton => {

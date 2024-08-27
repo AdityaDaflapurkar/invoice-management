@@ -6,6 +6,7 @@ import {
   setCustomerDetails,
   setIsExistingCustomer,
 } from '../../store/invoiceDraftSlice';
+import Footer from '../Common/Footer/Footer';
 
 function CustomerDetails() {
   const { customers, loading, selectedCustomer, isExistingCustomer } = useAppSelector((state) => ({
@@ -27,7 +28,6 @@ function CustomerDetails() {
     const selectedCustomer = customers.find((o) => o.name === e.target.value);
     if (selectedCustomer) {
       dispatch(setCustomerDetails(selectedCustomer));
-      console.log('onSelectCustomer' + JSON.stringify(selectedCustomer));
       dispatch(setIsExistingCustomer(true));
     }
   };

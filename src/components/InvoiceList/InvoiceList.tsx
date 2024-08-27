@@ -73,7 +73,7 @@ function InvoiceList(props: InvoiceListProps) {
           {invoiceRecords.map((row) => (
             <TableRow key={row.id}>
               <TableCell style={{ width: 160 }}>
-                <Link to={'/preview'} target='_blank' rel='noopener noreferrer'>
+                <Link to={'/invoice-preview'} target='_blank' rel='noopener noreferrer'>
                   {row.id}
                 </Link>
               </TableCell>

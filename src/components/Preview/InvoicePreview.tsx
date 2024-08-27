@@ -1,11 +1,24 @@
-import React, { useState } from 'react';
-import { Grid, Paper, Box, Typography, TextField, MenuItem } from '@mui/material';
+import { Grid, Paper, Box, Typography } from '@mui/material';
 import BillTable from './PreviewTable';
 import { useAppSelector } from '../../store/hooks';
 
-const CustomizeTemplate: React.FC = () => {
-  const invoiceDraft = useAppSelector((state) => state.invoiceDraft);
+interface InvoicePreviewProps {
+  headingStyles: any;
+  contentStyles: any;
+  backgroundColor: string;
+  tableHeadingBackgroundColor: string;
+  tableBodyBackgroundColor: string;
+}
 
+function InvoicePreview(props: InvoicePreviewProps) {
+  const invoiceDraft = useAppSelector((state) => state.invoiceDraft);
+  const {
+    headingStyles,
+    contentStyles,
+    backgroundColor,
+    tableHeadingBackgroundColor,
+    tableBodyBackgroundColor,
+  } = props;
   return (
     <Grid
       container
@@ -59,6 +72,6 @@ const CustomizeTemplate: React.FC = () => {
       </Grid>
     </Grid>
   );
-};
+}
 
-export default CustomizeTemplate;
+export default InvoicePreview;

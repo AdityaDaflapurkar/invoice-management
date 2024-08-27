@@ -33,6 +33,19 @@ const initialState: DraftSliceState = {
       taxes: [{ description: 'Tax 1', taxPercent: 12 }],
     },
   ],
+  themeData: {
+    headingStyles: {
+      fontSize: 12,
+      fontColor: 'red',
+    },
+    contentStyles: {
+      fontSize: 12,
+      fontColor: 'red',
+    },
+    backgroundColor: '',
+    tableHeadingBackgroundColor: '',
+    tableBodyBackgroundColor: '',
+  },
   total: 0,
 };
 
@@ -97,6 +110,9 @@ const invoiceDraftSlice = createSlice({
       );
       lineItem.taxes.splice(discountIndex, 1);
     },
+    setThemeData: (state, action) => {
+      state.themeData = action.payload;
+    },
   },
 });
 
@@ -107,5 +123,6 @@ export const {
   addLineItem,
   updateLineItem,
   removeLineItem,
+  setThemeData,
 } = invoiceDraftSlice.actions;
 export default invoiceDraftSlice.reducer;
